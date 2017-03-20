@@ -4,9 +4,17 @@ import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 public class TripServiceShould {
     private static final User GUEST = null;
     private static final User ANY_USER = new User();
+    private static final User REGISTERED_USER = new User();
+    private static final User ANOTHER_USER = new User();
+    private static final Trip BADAJOZ = new Trip();
     private User loggedInUser;
 
     @Test(expected = UserNotLoggedInException.class)
@@ -14,6 +22,19 @@ public class TripServiceShould {
         TripService tripService = new TestableTripService();
         loggedInUser = GUEST;
         tripService.getTripsByUser(ANY_USER);
+    }
+
+    @Test
+    public void return_no_trips_when_users_are_not_friends() {
+        TripService tripService = new TestableTripService();
+        loggedInUser = REGISTERED_USER;
+
+        User user = new User();
+        user.addFriend(ANOTHER_USER);
+        user.addTrip(BADAJOZ);
+
+        List<Trip> tripList = tripService.getTripsByUser(user);
+        assertThat(tripList.size(), is(0));
     }
 
     private class TestableTripService extends TripService {

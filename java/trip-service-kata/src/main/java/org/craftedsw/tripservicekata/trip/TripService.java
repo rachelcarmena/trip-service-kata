@@ -12,11 +12,10 @@ public class TripService {
 	private static final List<Trip> NO_TRIPS = new ArrayList<Trip>();
 
 	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
-		User loggedUser = getLoggedInUser();
-		if (loggedUser == null) {
+		if (getLoggedInUser() == null) {
 			throw new UserNotLoggedInException();
 		}
-		if (user.isFriendOf(loggedUser)) {
+		if (user.isFriendOf(getLoggedInUser())) {
             return tripsBy(user);
         }
 		return NO_TRIPS;

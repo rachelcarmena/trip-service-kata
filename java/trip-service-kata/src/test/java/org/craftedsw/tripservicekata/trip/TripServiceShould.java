@@ -15,6 +15,7 @@ public class TripServiceShould {
     private static final User REGISTERED_USER = new User();
     private static final User ANOTHER_USER = new User();
     private static final Trip BADAJOZ = new Trip();
+    private static final Trip MURCIA = new Trip();
     private User loggedInUser;
 
     @Test(expected = UserNotLoggedInException.class)
@@ -37,10 +38,30 @@ public class TripServiceShould {
         assertThat(tripList.size(), is(0));
     }
 
+    @Test
+    public void return_trips_when_users_are_friends() {
+        TripService tripService = new TestableTripService();
+        loggedInUser = REGISTERED_USER;
+
+        User user = new User();
+        user.addFriend(ANOTHER_USER);
+        user.addFriend(REGISTERED_USER);
+        user.addTrip(BADAJOZ);
+        user.addTrip(MURCIA);
+
+        List<Trip> tripList = tripService.getTripsByUser(user);
+        assertThat(tripList.size(), is(2));
+    }
+
     private class TestableTripService extends TripService {
         @Override
         protected User getLoggedInUser() {
             return loggedInUser;
+        }
+
+        @Override
+        protected List<Trip> tripsBy(User user) {
+            return user.trips();
         }
     }
 }

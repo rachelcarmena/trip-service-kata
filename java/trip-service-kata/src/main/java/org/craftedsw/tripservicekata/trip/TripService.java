@@ -13,13 +13,13 @@ public class TripService {
 
 	public List<Trip> getTripsByUser(User user) throws UserNotLoggedInException {
 		User loggedUser = getLoggedInUser();
-		if (loggedUser != null) {
+		if (loggedUser == null) {
+			throw new UserNotLoggedInException();
+		} else {
 			if (user.isFriendOf(loggedUser)) {
 				return tripsBy(user);
 			}
 			return NO_TRIPS;
-		} else {
-			throw new UserNotLoggedInException();
 		}
 	}
 

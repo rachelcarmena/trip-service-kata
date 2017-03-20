@@ -2,6 +2,7 @@ package org.craftedsw.tripservicekata.trip;
 
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException;
 import org.craftedsw.tripservicekata.user.User;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -17,19 +18,22 @@ public class TripServiceShould {
     private static final Trip BADAJOZ = new Trip();
     private static final Trip MURCIA = new Trip();
     private User loggedInUser;
+    private TripService tripService;
+
+    @Before
+    public void setUp() throws Exception {
+        tripService = new TestableTripService();
+        loggedInUser = REGISTERED_USER;
+    }
 
     @Test(expected = UserNotLoggedInException.class)
     public void validate_logged_in_user() {
-        TripService tripService = new TestableTripService();
         loggedInUser = GUEST;
         tripService.getTripsByUser(ANY_USER);
     }
 
     @Test
     public void return_no_trips_when_users_are_not_friends() {
-        TripService tripService = new TestableTripService();
-        loggedInUser = REGISTERED_USER;
-
         User user = UserBuilder.aUser()
                         .addFriends(ANOTHER_USER)
                         .addTrips(BADAJOZ)
@@ -41,9 +45,6 @@ public class TripServiceShould {
 
     @Test
     public void return_trips_when_users_are_friends() {
-        TripService tripService = new TestableTripService();
-        loggedInUser = REGISTERED_USER;
-
         User user = UserBuilder.aUser()
                         .addFriends(ANOTHER_USER, REGISTERED_USER)
                         .addTrips(BADAJOZ, MURCIA)

@@ -30,9 +30,10 @@ public class TripServiceShould {
         TripService tripService = new TestableTripService();
         loggedInUser = REGISTERED_USER;
 
-        User user = new User();
-        user.addFriend(ANOTHER_USER);
-        user.addTrip(BADAJOZ);
+        User user = UserBuilder.aUser()
+                        .addFriends(ANOTHER_USER)
+                        .addTrips(BADAJOZ)
+                        .build();
 
         List<Trip> tripList = tripService.getTripsByUser(user);
         assertThat(tripList.size(), is(0));
@@ -43,11 +44,10 @@ public class TripServiceShould {
         TripService tripService = new TestableTripService();
         loggedInUser = REGISTERED_USER;
 
-        User user = new User();
-        user.addFriend(ANOTHER_USER);
-        user.addFriend(REGISTERED_USER);
-        user.addTrip(BADAJOZ);
-        user.addTrip(MURCIA);
+        User user = UserBuilder.aUser()
+                        .addFriends(ANOTHER_USER, REGISTERED_USER)
+                        .addTrips(BADAJOZ, MURCIA)
+                        .build();
 
         List<Trip> tripList = tripService.getTripsByUser(user);
         assertThat(tripList.size(), is(2));

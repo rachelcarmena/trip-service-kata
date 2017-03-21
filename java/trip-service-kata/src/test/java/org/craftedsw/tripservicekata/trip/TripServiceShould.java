@@ -17,7 +17,6 @@ public class TripServiceShould {
     private static final User ANOTHER_USER = new User();
     private static final Trip BADAJOZ = new Trip();
     private static final Trip MURCIA = new Trip();
-    private User loggedInUser;
     private TripService tripService;
 
     @Before
@@ -28,16 +27,15 @@ public class TripServiceShould {
     @Test(expected = UserNotLoggedInException.class)
     public void validate_logged_in_user() {
         tripService = new TestableTripService(GUEST);
-        loggedInUser = GUEST;
         tripService.getTripsByUser(ANY_USER);
     }
 
     @Test
     public void return_no_trips_when_users_are_not_friends() {
         User user = UserBuilder.aUser()
-                        .addFriends(ANOTHER_USER)
-                        .addTrips(BADAJOZ)
-                        .build();
+                .addFriends(ANOTHER_USER)
+                .addTrips(BADAJOZ)
+                .build();
 
         List<Trip> tripList = tripService.getTripsByUser(user);
         assertThat(tripList.size(), is(0));
@@ -46,9 +44,9 @@ public class TripServiceShould {
     @Test
     public void return_trips_when_users_are_friends() {
         User user = UserBuilder.aUser()
-                        .addFriends(ANOTHER_USER, REGISTERED_USER)
-                        .addTrips(BADAJOZ, MURCIA)
-                        .build();
+                .addFriends(ANOTHER_USER, REGISTERED_USER)
+                .addTrips(BADAJOZ, MURCIA)
+                .build();
 
         List<Trip> tripList = tripService.getTripsByUser(user);
         assertThat(tripList.size(), is(2));

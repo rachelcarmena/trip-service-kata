@@ -3,8 +3,8 @@ package org.craftedsw.tripservicekata.trip;
 import org.craftedsw.tripservicekata.user.User;
 
 class UserBuilder {
-    private User[] friends;
-    private Trip[] trips;
+    private User[] friends = new User[0];
+    private Trip[] trips = new Trip[0];
 
     public static UserBuilder aUser() {
         return new UserBuilder();

@@ -25,16 +25,12 @@ public class TripService {
             throw new UserNotLoggedInException();
         }
         if (user.isFriendOf(loggedInUser)) {
-            return tripsBy(user);
+            return TripDAO.tripsBy(user);
         }
         return NO_TRIPS;
     }
 
     private boolean isNotValidUser() {
         return loggedInUser == null;
-    }
-
-    protected List<Trip> tripsBy(User user) {
-        return TripDAO.findTripsByUser(user);
     }
 }

@@ -22,12 +22,12 @@ public class TripServiceShould {
 
     @Before
     public void setUp() throws Exception {
-        tripService = new TestableTripService();
-        loggedInUser = REGISTERED_USER;
+        tripService = new TestableTripService(REGISTERED_USER);
     }
 
     @Test(expected = UserNotLoggedInException.class)
     public void validate_logged_in_user() {
+        tripService = new TestableTripService(GUEST);
         loggedInUser = GUEST;
         tripService.getTripsByUser(ANY_USER);
     }
@@ -55,9 +55,9 @@ public class TripServiceShould {
     }
 
     private class TestableTripService extends TripService {
-        @Override
-        protected User getLoggedInUser() {
-            return loggedInUser;
+
+        public TestableTripService(User user) {
+            super(user);
         }
 
         @Override
